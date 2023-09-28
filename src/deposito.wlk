@@ -23,14 +23,14 @@ class Deposito {
 		return formaciones.any({form=> form.esCompleja()})
 	}
 	
-	method locomotoraConArrastreMayorA(kg){
+	method locomotoraCapazDeMover(kg){
 		return locomotoras.findOrDefault({loc=> loc.capacidadDeArrastre() >= loc.peso() + kg }, null)
 	}
 	
 	method agregarLocomotoraA(formacion){
 		if (not formacion.puedeMoverse()){	
 			const kilosFaltantes = formacion.cuantosKgFaltanParaMoverse()
-			const locomotoraDisponible = self.locomotoraConArrastreMayorA(kilosFaltantes)
+			const locomotoraDisponible = self.locomotoraCapazDeMover(kilosFaltantes)
 		
 			if (locomotoraDisponible != null){
 			formacion.agregarLocomotora(locomotoraDisponible)

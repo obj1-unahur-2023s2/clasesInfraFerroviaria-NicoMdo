@@ -67,6 +67,14 @@ describe "Test Deposito" {
 		assert.that(formacion2.puedeMoverse())
 	}
 	
+	test "hay al menos una locomotora capaz de mover 50000kg "{
+		assert.that(depo.locomotoraCapazDeMover(50000) != null)
+	}
+	
+	test "no hay locomotora capaz de mover 69001kg"{
+		assert.that(depo.locomotoraCapazDeMover(69001) == null )
+	}
+	
 
 }
 	
