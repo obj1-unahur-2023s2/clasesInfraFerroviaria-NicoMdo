@@ -26,7 +26,7 @@ describe "Test Deposito" {
 	const locomotora4 = new Locomotora(peso=1000, capacidadDeArrastre= 70000)
 	
 	
-//iniciar con:
+//iniciar coN:
 	method initialize() {
 		formacion1.agregarVagon(pasajero1)
 		formacion1.agregarVagon(pasajero2)
