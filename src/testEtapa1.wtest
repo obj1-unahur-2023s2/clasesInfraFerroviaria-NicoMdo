@@ -1,0 +1,136 @@
+import formacion.*
+import vagones.*
+
+describe "Test Formacion con Vagones" {
+// declaracion objetos
+	//formaciones
+	const formacion = new Formacion()
+	const formacion2 = new Formacion()
+	//vagones formacion 1
+	const pasajero1 = new Pasajero(ancho=4, largo=10, tieneBanio=true)
+	const pasajero2 = new Pasajero(ancho=2, largo=7, tieneBanio=false, estaOrdenado=false)
+	const carga1 = new Carga(cargaMaximaIdeal=6800 , maderasSueltas=5)
+	const dormitorio1= new Dormitorio(cantidadDeCompartimientos=8, camasPorCompartimiento=3)
+	//vagones formacion 2
+	const carga2 = new Carga(cargaMaximaIdeal=8000 , maderasSueltas=1)
+	const dormitorio2= new Dormitorio(cantidadDeCompartimientos=15, camasPorCompartimiento=4)
+	
+//iniciar formaciones con:
+	method initialize() {
+		formacion.desarmarFormacion()
+		formacion.agregarVagon(pasajero1)
+		formacion.agregarVagon(pasajero2)
+		formacion.agregarVagon(carga1)
+		formacion.agregarVagon(dormitorio1)
+		formacion2.desarmarFormacion()
+		formacion2.agregarVagon(carga2)
+		formacion2.agregarVagon(dormitorio2)
+	}
+	
+//Tests formacion 1 y 2
+	test "f1=cuantos pasajeros puede llevar antes del Matenimiento" {
+		assert.equals(165, formacion.cuantosPasajerosPuedeLLevar())
+	}
+	test "f2=cuantos pasajeros puede llevar antes del Matenimiento" {
+		assert.equals(60, formacion2.cuantosPasajerosPuedeLLevar())
+	}
+	
+	test "f1=cuantos pasajeros puede llevar despues del mantenimiento" {
+		formacion.realizarMantenimientoVagones()
+		assert.equals(180, formacion.cuantosPasajerosPuedeLLevar())
+	}
+	test "f2=cuantos pasajeros puede llevar despues del mantenimiento" {
+		formacion2.realizarMantenimientoVagones()
+		assert.equals(60, formacion2.cuantosPasajerosPuedeLLevar())
+	}
+	
+	test "f1=cantidad vagones populares antes del Matenimiento" {
+		assert.equals(1, formacion.cantidadVagonesPopulares())
+	}
+	test "f2=cantidad vagones populares antes del Matenimiento" {
+		assert.equals(1, formacion2.cantidadVagonesPopulares())
+	}
+	
+	test "f1=cantidad vagones populares despues del mantenimiento" {
+		formacion.realizarMantenimientoVagones()
+		assert.equals(2, formacion.cantidadVagonesPopulares())
+	}
+	test "f2=cantidad vagones populares despues del mantenimiento" {
+		formacion2.realizarMantenimientoVagones()
+		assert.equals(1, formacion2.cantidadVagonesPopulares())
+	}
+	
+	
+	test "f1=es formacion carguera antes del Matenimiento" {
+		assert.notThat(formacion.esFormacionCarguera())
+	}
+	test "f2=es formacion carguera antes del Matenimiento" {
+		assert.that(formacion2.esFormacionCarguera())
+	}
+	
+	test "f1=es formacion carguera despues del mantenimiento" {
+		formacion.realizarMantenimientoVagones()
+		assert.notThat(formacion.esFormacionCarguera())
+	}
+	test "f2=es formacion carguera despues del mantenimiento" {
+		formacion2.realizarMantenimientoVagones()
+		assert.that(formacion2.esFormacionCarguera())
+	}
+
+	test "f1=dispersion de pesos antes del Matenimiento" {
+		assert.equals(4220, formacion.dispersionDePesos())
+	}
+	test "f2=dispersion de pesos antes del Matenimiento" {
+		assert.equals(900, formacion2.dispersionDePesos())
+	}
+	
+	test "f1= dispersion de pesos despues del mantenimiento" {
+		formacion.realizarMantenimientoVagones()
+		assert.equals(3200, formacion.dispersionDePesos())
+	}
+	test "f2= dispersion de pesos despues del mantenimiento" {
+		formacion2.realizarMantenimientoVagones()
+		assert.equals(500, formacion2.dispersionDePesos())
+	}
+	
+	test "f1=cantidad de baños antes del Matenimiento" {
+		assert.equals(2, formacion.cantidDeBanios())
+	}
+	test "f2=cantidad de baños antes del Matenimiento" {
+		assert.equals(1, formacion2.cantidDeBanios())
+	}
+	
+	test "f1= cantidad de baños despues del mantenimiento" {
+		formacion.realizarMantenimientoVagones()
+		assert.equals(2, formacion.cantidDeBanios())
+	}
+	test "f2= cantidad de baños despues del mantenimiento" {
+		formacion2.realizarMantenimientoVagones()
+		assert.equals(1, formacion2.cantidDeBanios())
+	}
+	
+	test "no esta organizada " {
+		assert.notThat(formacion.estaOrganizada())
+	}
+	
+	test "esta organizada con ultimo de carga" {
+		formacion.desarmarFormacion()
+		formacion.agregarVagon(pasajero1)
+		formacion.agregarVagon(dormitorio1)
+		formacion.agregarVagon(pasajero2)
+		formacion.agregarVagon(carga1)
+		assert.that(formacion.estaOrganizada())		
+	}
+
+	test "esta organizada con sin vagones de carga" {
+		formacion.desarmarFormacion()
+		formacion.agregarVagon(pasajero1)
+		formacion.agregarVagon(dormitorio1)
+		formacion.agregarVagon(pasajero2)
+		assert.that(formacion.estaOrganizada())		
+	}
+	
+	test "peso maximo de la formacion"{
+		assert.equals(29800, formacion.pesoMaximo())
+	}
+}

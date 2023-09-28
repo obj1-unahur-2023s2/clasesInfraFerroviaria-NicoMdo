@@ -1,0 +1,73 @@
+import formacion.*
+import vagones.*
+import locomotora.*
+import deposito.*
+
+describe "Test Deposito" {
+// declaracion objetos
+	
+	//deposito
+	const depo = new Deposito() 
+
+	//formaciones
+	const formacion1 = new Formacion()
+	const formacion2 = new Formacion()
+	
+	//vagones formacion 
+	const pasajero1 = new Pasajero(ancho=4, largo=10, tieneBanio=true)
+	const pasajero2 = new Pasajero(ancho=2, largo=7, tieneBanio=false, estaOrdenado=false)
+	const carga1 = new Carga(cargaMaximaIdeal=6800 , maderasSueltas=5)
+	const dormitorio1= new Dormitorio(cantidadDeCompartimientos=8, camasPorCompartimiento=3)
+	
+	//locomotoras
+	const locomotora1 = new Locomotora(peso=3000, capacidadDeArrastre= 20000)
+	const locomotora2 = new Locomotora(peso=5000, capacidadDeArrastre= 22000)
+	const locomotora3 = new Locomotora(peso=90000, capacidadDeArrastre= 18000)
+	const locomotora4 = new Locomotora(peso=1000, capacidadDeArrastre= 70000)
+	
+	
+//iniciar con:
+	method initialize() {
+		formacion1.agregarVagon(pasajero1)
+		formacion1.agregarVagon(pasajero2)
+		formacion1.agregarVagon(carga1)
+		formacion1.agregarVagon(dormitorio1)
+		
+		formacion2.agregarVagon(carga1)
+		formacion2.agregarVagon(dormitorio1)
+		
+		depo.agregarFormacion(formacion1)
+		depo.agregarFormacion(formacion2)
+		
+		depo.agregarLocomotora(locomotora1)
+		depo.agregarLocomotora(locomotora2)
+		depo.agregarLocomotora(locomotora4)
+	}
+	
+//Tests
+	test "los vagones mas pesados son pasajero1 y dormitorio1"{
+		assert.that(depo.vagonesMasPesados() == #{dormitorio1 ,pasajero1})
+	}
+	
+	test "ninguna de las formaciones en el depo necesita conductor experimentado"{
+		assert.notThat(depo.necesitaConductorExp())
+	}
+	
+	test "una de las formaciones en el depo necesita conductor experimentado despues de agregar locomotora excedida de peso"{
+		formacion1.agregarLocomotora(locomotora3)
+		assert.that(depo.necesitaConductorExp())
+	}
+	
+	test "la formacion 2 no puede moverse"{
+		assert.notThat(formacion2.puedeMoverse())
+	}
+	
+	test "depo agrega locomotora a la formacion 2 y ya puede moverse"{
+		depo.agregarLocomotoraA(formacion2)
+		assert.that(formacion2.puedeMoverse())
+	}
+	
+
+}
+	
+	

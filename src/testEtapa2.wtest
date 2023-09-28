@@ -1,0 +1,63 @@
+import formacion.*
+import vagones.*
+import locomotora.*
+
+describe "Test Formacion con Locomotoras" {
+// declaracion objetos
+	//formacion
+	const formacion = new Formacion()
+	
+	//vagones formacion 
+	const pasajero1 = new Pasajero(ancho=4, largo=10, tieneBanio=true)
+	const pasajero2 = new Pasajero(ancho=2, largo=7, tieneBanio=false, estaOrdenado=false)
+	const carga1 = new Carga(cargaMaximaIdeal=6800 , maderasSueltas=5)
+	const dormitorio1= new Dormitorio(cantidadDeCompartimientos=8, camasPorCompartimiento=3)
+	
+	//locomotoras
+	const locomotora1 = new Locomotora(peso=3000, capacidadDeArrastre= 20000)
+	const locomotora2 = new Locomotora(peso=5000, capacidadDeArrastre= 22000)
+	
+	
+//iniciar con:
+	method initialize() {
+		formacion.desarmarFormacion()
+		formacion.agregarVagon(pasajero1)
+		formacion.agregarVagon(pasajero2)
+		formacion.agregarVagon(carga1)
+		formacion.agregarVagon(dormitorio1)
+	}
+	
+//Tests
+	test "la formacion es eficiente con locomotora1"{
+		formacion.agregarLocomotora(locomotora1)
+		assert.that(formacion.esEficiente())
+	}
+	
+	test "la formacion no puede moverse con locomotora1"{
+		formacion.agregarLocomotora(locomotora1)
+		assert.notThat(formacion.puedeMoverse())
+	}
+	test "faltan 12800kg de empuje"{
+		formacion.agregarLocomotora(locomotora1)
+		assert.equals(12800, formacion.cuantosKgFaltanParaMoverse())
+	}
+	
+	test "la formacion no es eficiente con locomotora1 y locomotora2"{
+		formacion.agregarLocomotora(locomotora1)
+		formacion.agregarLocomotora(locomotora2)
+		assert.notThat(formacion.esEficiente())
+	}
+	
+	test "la formacion puede moverse con locomotora1 y locomotora2"{
+		formacion.agregarLocomotora(locomotora1)
+		formacion.agregarLocomotora(locomotora2)
+		assert.that(formacion.puedeMoverse())
+	}
+	
+	test "a la formacion le faltan 0kg de empuje con locomotora1 y locomotora2"{
+		formacion.agregarLocomotora(locomotora1)
+		formacion.agregarLocomotora(locomotora2)
+		assert.equals(0, formacion.cuantosKgFaltanParaMoverse())
+	}
+	
+}
